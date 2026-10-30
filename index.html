@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenbroad Smoke Shop | 620 S Broad St, Philadelphia</title>
+  <meta name="description" content="Greenbroad Smoke Shop located at 620 S Broad St, Philadelphia, PA. Cigars, loose tobacco, glassware, and accessories. Clean shop, fair prices, open late.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              night: '#080c14',       // Primary background
+              surface: '#0f172a',     // Header & nav surface
+              card: '#151d30',        // Elevated card background
+              cardHover: '#1c263f',
+              border: '#243048',      // Crisp, subtle borders
+              copper: '#f59e0b',      // Warm luminous amber/copper
+              copperHover: '#d97706',
+              amberAccent: '#ea580c', // Secondary warm gradient
+              platinum: '#f8fafc',    // Clean heading text
+              muted: '#94a3b8'        // Subtitle text
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Smooth custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #080c14; }
+    ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+
+    .copper-btn-gradient {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+    }
+    .copper-text-gradient {
+      background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #ea580c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .copper-border-glow {
+      transition: all 0.25s ease-in-out;
+    }
+    .copper-border-glow:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 8px 24px -6px rgba(245, 158, 11, 0.15);
+    }
+    .page-view {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .page-view.active {
+      display: block;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-brand-night text-slate-200 font-sans antialiased selection:bg-brand-copper selection:text-brand-night pb-20 md:pb-0 min-h-screen flex flex-col">
+
+  <!-- 21+ Age Verification Gate -->
+  <div id="ageGateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-opacity duration-300">
+    <div class="relative w-full max-w-sm bg-brand-surface border border-brand-border rounded-3xl p-6 sm:p-8 text-center shadow-2xl">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-copper/15 border border-brand-copper/30 text-brand-copper mb-4">
+        <i data-lucide="shield-alert" class="w-7 h-7"></i>
+      </div>
+      <h2 class="text-2xl font-display font-bold text-white mb-2">Age Verification</h2>
+      <p class="text-xs text-brand-muted mb-6 leading-relaxed">
+        You must be at least <span class="text-brand-copper font-semibold">21 years old</span> to view tobacco, cigars, and smoking accessories. Valid photo ID is required for in-store purchases.
+      </p>
+
+      <div class="space-y-2.5">
+        <button id="btnVerifyAge" class="w-full py-3 px-5 rounded-xl copper-btn-gradient text-slate-950 font-bold text-sm hover:opacity-95 transition shadow-lg shadow-brand-copper/25 flex items-center justify-center gap-2">
+          <span>I am 21 or Older</span>
+          <i data-lucide="check" class="w-4 h-4"></i>
+        </button>
+        <button id="btnExitAge" class="w-full py-2.5 px-4 rounded-xl bg-brand-card border border-brand-border text-slate-400 font-medium text-xs hover:text-white transition">
+          I am Under 21 (Exit)
+        </button>
+      </div>
+
+      <p class="text-[11px] text-slate-500 mt-4">620 South Broad St, Philadelphia</p>
+    </div>
+  </div>
+
+  <!-- Exit Under 21 Screen -->
+  <div id="underAgeNotice" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-brand-night p-6 text-center">
+    <i data-lucide="lock" class="w-12 h-12 text-rose-500 mb-3"></i>
+    <h1 class="text-xl font-display font-bold text-white mb-1">Access Restricted</h1>
+    <p class="text-xs text-brand-muted max-w-xs mb-5">You must be 21 or older to view regulated smoke shop content.</p>
+    <a href="https://www.google.com" class="px-5 py-2 rounded-xl bg-brand-card text-xs text-slate-200">Leave Site</a>
+  </div>
+
+  <!-- Photo Lightbox Modal -->
+  <div id="lightboxModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+    <button id="btnCloseLightbox" class="absolute top-5 right-5 text-white/80 hover:text-white p-2 rounded-full bg-brand-card border border-brand-border transition">
+      <i data-lucide="x" class="w-5 h-5"></i>
+    </button>
+    <div class="max-w-3xl max-h-[82vh] flex flex-col items-center">
+      <img id="lightboxImg" src="" alt="Enlarged view" class="max-w-full max-h-[72vh] object-contain rounded-2xl border border-brand-border shadow-2xl">
+      <p id="lightboxCaption" class="mt-3 text-xs sm:text-sm text-slate-300 font-medium text-center"></p>
+    </div>
+  </div>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-brand-surface/95 backdrop-blur-md border-b border-brand-border">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
+      
+      <!-- Brand Logo & Quick Status -->
+      <button onclick="navigateTo('home')" class="flex items-center gap-3 text-left focus:outline-none group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-black font-display text-lg shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+          G
+        </div>
+        <div>
+          <span class="block font-display font-bold text-base sm:text-lg tracking-tight text-brand-platinum leading-none">GREENBROAD</span>
+          <span class="block text-[10px] tracking-wider uppercase text-brand-copper font-medium mt-0.5">Smoke Shop • Philadelphia</span>
+        </div>
+      </button>
+
+      <!-- Desktop Multi-Page Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-brand-night/60 border border-brand-border/80 p-1 rounded-2xl text-xs font-semibold">
+        <button onclick="navigateTo('home')" id="desktop-tab-home" class="nav-btn px-4 py-2 rounded-xl text-brand-copper bg-brand-surface shadow-sm">Home</button>
+        <button onclick="navigateTo('gallery')" id="desktop-tab-gallery" class="nav-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white transition">Gallery</button>
+        <button onclick="navigateTo('reviews')" id="desktop-tab-reviews" class="nav-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white transition flex items-center gap-1.5">
+          <span>Reviews</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded-md bg-brand-copper/20 text-brand-copper font-bold">4.1★</span>
+        </button>
+        <button onclick="navigateTo('hours-location')" id="desktop-tab-hours-location" class="nav-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white transition">Hours & Location</button>
+      </nav>
+
+      <!-- Quick Action Call Header Button -->
+      <div class="flex items-center gap-2">
+        <a href="tel:2153985169" class="px-4 py-2 rounded-xl copper-btn-gradient text-slate-950 text-xs font-bold hover:opacity-95 transition flex items-center gap-1.5 shadow-md shadow-brand-copper/20" title="Call Greenbroad Smoke Shop">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          <span>Call Shop</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Live Status Bar -->
+  <aside class="bg-brand-night/95 border-b border-brand-border/50 py-2 px-4 text-xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span id="liveStatusBadge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-brand-copper/15 text-brand-copper border border-brand-copper/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-copper animate-ping"></span>
+          <span>Checking hours...</span>
+        </span>
+        <span class="hidden sm:inline text-slate-400 text-[11px]">620 S Broad St (Lombard-South Station)</span>
+      </div>
+      <button onclick="navigateTo('hours-location')" class="text-brand-copper hover:underline text-[11px] font-semibold flex items-center gap-1">
+        <span>Full Schedule & Map</span>
+        <i data-lucide="chevron-right" class="w-3 h-3"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Multi-Page Content Area -->
+  <main class="flex-grow">
+    
+    <!-- PAGE 1: HOME (Compact, Clean Landing Page) -->
+    <div id="page-home" class="page-view active">
+      
+      <!-- Compact Hero Section -->
+      <section class="relative pt-8 pb-12 sm:pt-14 sm:pb-16 px-4 sm:px-6 overflow-hidden">
+        <div class="max-w-5xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <div class="lg:col-span-7 text-center lg:text-left">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-card border border-brand-border text-xs text-brand-copper mb-4">
+                <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                <span class="text-[11px] font-semibold uppercase tracking-wider">Philadelphia Broad Street Corridor</span>
+              </div>
+
+              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold text-brand-platinum tracking-tight leading-tight mb-4">
+                South Philly's Trusted <br class="hidden sm:inline">
+                <span class="copper-text-gradient">Smoke & Cigar</span> Shop.
+              </h1>
+
+              <p class="text-sm sm:text-base text-brand-muted leading-relaxed font-light mb-6 max-w-xl mx-auto lg:mx-0">
+                A clean, welcoming storefront stocked with fresh cigars, premium glassware, loose pipe tobacco, and smoking accessories. Known for fair prices and courteous service.
+              </p>
+
+              <!-- Quick action links -->
+              <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2.5 mb-6">
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Greenbroad+Smoke+Shop+620+South+Broad+Street+Philadelphia+PA+19146&destination_place_id=ChIJO3fG1KHHxokRfnV-4RnNIsA" class="w-full sm:w-auto px-5 py-3 rounded-xl copper-btn-gradient text-slate-950 font-bold text-xs sm:text-sm hover:opacity-95 transition flex items-center justify-center gap-2 shadow-lg shadow-brand-copper/20">
+                  <i data-lucide="navigation" class="w-4 h-4"></i>
+                  <span>Get Directions</span>
+                </a>
+                <a href="tel:2153985169" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-brand-card border border-brand-border hover:border-slate-500 text-white font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2">
+                  <i data-lucide="phone" class="w-4 h-4 text-brand-copper"></i>
+                  <span>Call Shop</span>
+                </a>
+              </div>
+
+              <!-- Key Badges -->
+              <div class="grid grid-cols-3 gap-2 border-t border-brand-border/60 pt-4 text-center sm:text-left">
+                <div>
+                  <span class="block text-brand-copper font-bold text-sm sm:text-base font-display">Open 7 Days</span>
+                  <span class="text-[11px] text-brand-muted">Late until 11 PM</span>
+                </div>
+                <div>
+                  <span class="block text-brand-platinum font-bold text-sm sm:text-base font-display">4.1 ★ Google</span>
+                  <span class="text-[11px] text-brand-muted">18+ real reviews</span>
+                </div>
+                <div>
+                  <span class="block text-amber-500 font-bold text-sm sm:text-base font-display">Subway Near</span>
+                  <span class="text-[11px] text-brand-muted">Lombard-South</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Image Preview Card -->
+            <div class="lg:col-span-5">
+              <div class="relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card shadow-xl group">
+                <img 
+                  src="https://lh3.googleusercontent.com/Q4EI-eajPvuq12GZBoGHA1sw_nEyqVQRnvyEkPKog0UFfXe7-0jFISC7mbEXwD6wuAwlQPboaJkfg459ZQ=s0" 
+                  alt="Greenbroad Smoke Shop Storefront" 
+                  class="w-full h-64 sm:h-72 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-night via-transparent opacity-80"></div>
+                <div class="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-brand-night/90 backdrop-blur-md border border-brand-border flex items-center justify-between">
+                  <div class="text-left">
+                    <p class="text-[10px] text-brand-copper uppercase font-bold tracking-wider">Storefront</p>
+                    <p class="text-xs font-bold text-white">620 South Broad St</p>
+                  </div>
+                  <button onclick="navigateTo('gallery')" class="text-xs font-semibold text-slate-200 hover:text-brand-copper flex items-center gap-1 transition">
+                    <span>Gallery</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Clean Hub Navigation Cards (Short & uncluttered) -->
+      <section class="py-10 px-4 sm:px-6 bg-brand-surface/40 border-t border-brand-border/60">
+        <div class="max-w-5xl mx-auto">
+          
+          <div class="text-center mb-8">
+            <h2 class="text-xl sm:text-2xl font-display font-bold text-white">Explore Greenbroad</h2>
+            <p class="text-xs sm:text-sm text-brand-muted mt-1">Tap a section to explore what we offer</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Card 1: Offerings & Gallery -->
+            <button onclick="navigateTo('gallery')" class="text-left bg-brand-card border border-brand-border rounded-2xl p-5 copper-border-glow group">
+              <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border flex items-center justify-center text-brand-copper mb-3 group-hover:bg-brand-copper/10 transition">
+                <i data-lucide="image" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-display font-bold text-base text-white mb-1 group-hover:text-brand-copper transition">Store Gallery & Inventory</h3>
+              <p class="text-xs text-brand-muted mb-3 leading-relaxed">
+                Take a look at our clean display cases, glassware selection, cigarillos, and rolling gear.
+              </p>
+              <span class="inline-flex items-center gap-1 text-xs text-brand-copper font-semibold">
+                <span>View 6 Photos</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </button>
+
+            <!-- Card 2: Reviews -->
+            <button onclick="navigateTo('reviews')" class="text-left bg-brand-card border border-brand-border rounded-2xl p-5 copper-border-glow group">
+              <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border flex items-center justify-center text-amber-500 mb-3 group-hover:bg-amber-500/10 transition">
+                <i data-lucide="star" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-display font-bold text-base text-white mb-1 group-hover:text-brand-copper transition">4.1★ Google Reviews</h3>
+              <p class="text-xs text-brand-muted mb-3 leading-relaxed">
+                Read authentic customer feedback praising our welcoming staff, clean shelves, and recommendations.
+              </p>
+              <span class="inline-flex items-center gap-1 text-xs text-brand-copper font-semibold">
+                <span>Read Reviews & Feedback</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </button>
+
+            <!-- Card 3: Location & Hours -->
+            <button onclick="navigateTo('hours-location')" class="text-left bg-brand-card border border-brand-border rounded-2xl p-5 copper-border-glow group">
+              <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border flex items-center justify-center text-orange-400 mb-3 group-hover:bg-orange-500/10 transition">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-display font-bold text-base text-white mb-1 group-hover:text-brand-copper transition">Hours & Location</h3>
+              <p class="text-xs text-brand-muted mb-3 leading-relaxed">
+                Open late 7 days a week. View directions, parking tips, and SEPTA subway guidance.
+              </p>
+              <span class="inline-flex items-center gap-1 text-xs text-brand-copper font-semibold">
+                <span>View Map & Schedule</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </button>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Highlights Grid -->
+      <section class="py-8 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
+          <div class="bg-brand-surface border border-brand-border rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-white font-display">Need to check if an item is currently in stock?</h3>
+              <p class="text-xs text-brand-muted mt-0.5">Reach out to our team before visiting our South Broad Street shop.</p>
+            </div>
+            <a href="tel:2153985169" class="shrink-0 px-5 py-2.5 rounded-xl copper-btn-gradient text-slate-950 font-bold text-xs hover:opacity-95 transition flex items-center gap-2 shadow-md shadow-brand-copper/20">
+              <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+              <span>Call Now</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- PAGE 2: GALLERY (Clean Photo Showcase with Filters) -->
+    <div id="page-gallery" class="page-view">
+      <section class="py-8 sm:py-12 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
+          
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <div>
+              <span class="text-[11px] font-bold text-brand-copper uppercase tracking-wider">In-Store Gallery</span>
+              <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-0.5">Inside Greenbroad</h2>
+              <p class="text-xs sm:text-sm text-brand-muted mt-1">Real photos from our Google profile at 620 S Broad St.</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap gap-1.5 text-xs font-semibold" id="galleryFilterContainer">
+              <button class="gallery-filter-btn active px-3 py-1.5 rounded-lg bg-brand-copper text-slate-950" data-filter="all">All</button>
+              <button class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-brand-card text-slate-300 hover:text-white border border-brand-border" data-filter="glass">Glass</button>
+              <button class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-brand-card text-slate-300 hover:text-white border border-brand-border" data-filter="shelves">Shelves & Stock</button>
+              <button class="gallery-filter-btn px-3 py-1.5 rounded-lg bg-brand-card text-slate-300 hover:text-white border border-brand-border" data-filter="storefront">Storefront</button>
+            </div>
+          </div>
+
+          <!-- Photo Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="galleryGrid">
+            
+            <!-- Photo 1 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="storefront"
+                 data-src="https://lh3.googleusercontent.com/Q4EI-eajPvuq12GZBoGHA1sw_nEyqVQRnvyEkPKog0UFfXe7-0jFISC7mbEXwD6wuAwlQPboaJkfg459ZQ=s0"
+                 data-caption="Storefront & Welcoming Broad Street Entrance">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/Q4EI-eajPvuq12GZBoGHA1sw_nEyqVQRnvyEkPKog0UFfXe7-0jFISC7mbEXwD6wuAwlQPboaJkfg459ZQ=s0" 
+                     alt="Storefront Entrance" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Storefront</span>
+                  <p class="text-white font-medium">Entrance on Broad St</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+            <!-- Photo 2 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="glass"
+                 data-src="https://lh3.googleusercontent.com/Llfl6jZKAkpgYnjs0QOjWXORKsYHlpJ-n4bcgI7mfEEU89pvrUVPdy3tYySnl4hes_4ZSDxSXwhZGj_c0w=s0"
+                 data-caption="Handblown Glassware & Display Cases">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/Llfl6jZKAkpgYnjs0QOjWXORKsYHlpJ-n4bcgI7mfEEU89pvrUVPdy3tYySnl4hes_4ZSDxSXwhZGj_c0w=s0" 
+                     alt="Glass Display Cases" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Glass Collection</span>
+                  <p class="text-white font-medium">Lit Display Cases</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+            <!-- Photo 3 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="shelves"
+                 data-src="https://lh3.googleusercontent.com/zd0VKmJWbmIDC-7OmgI7uo0WeUtb4LcNY05gc05wKgysFbxJei7jGxgmVm3VtMLRl7euP86vgTDiciuRgQ=s0"
+                 data-caption="Stocked Rolling Papers, Wraps & Tobacco Wall">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/zd0VKmJWbmIDC-7OmgI7uo0WeUtb4LcNY05gc05wKgysFbxJei7jGxgmVm3VtMLRl7euP86vgTDiciuRgQ=s0" 
+                     alt="Rolling Papers & Supplies Wall" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Shelves</span>
+                  <p class="text-white font-medium">Papers, Cones & Wraps</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+            <!-- Photo 4 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="storefront"
+                 data-src="https://lh3.googleusercontent.com/EJnjqxITEnnsl1wGO4bCowpWInp-QvFGAs0uJN_0aXCvz0tMSNhI2Wd1qXw1MMU4mGyxaJIIJEVP8wFJQg=s0"
+                 data-caption="Checkout Counter & Accessories Showcase">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/EJnjqxITEnnsl1wGO4bCowpWInp-QvFGAs0uJN_0aXCvz0tMSNhI2Wd1qXw1MMU4mGyxaJIIJEVP8wFJQg=s0" 
+                     alt="Checkout Counter" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Counter</span>
+                  <p class="text-white font-medium">Accessories & Hardware</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+            <!-- Photo 5 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="shelves"
+                 data-src="https://lh3.googleusercontent.com/9I3Tx1IacqD3cZCkuyZlY7cydBWtUZl01PZwl6sXWt1ogTRfh2wiwpnz32TYszeMh32dO7hDw6S5HhzXTg=s0"
+                 data-caption="Curated Smoke Gear & Premium In-Store Inventory">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/9I3Tx1IacqD3cZCkuyZlY7cydBWtUZl01PZwl6sXWt1ogTRfh2wiwpnz32TYszeMh32dO7hDw6S5HhzXTg=s0" 
+                     alt="Inventory Display" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Inventory</span>
+                  <p class="text-white font-medium">Specialty Blends & Tins</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+            <!-- Photo 6 -->
+            <div class="gallery-card group relative rounded-2xl overflow-hidden border border-brand-border bg-brand-card cursor-pointer copper-border-glow" 
+                 data-category="glass"
+                 data-src="https://lh3.googleusercontent.com/CBLtgz35_L5MXET_ZWPUZMYTh5u8j4sJoGf9ojckSWLGlISDH5Oz6d49kvLg5Mlr7JO8jpi9_DfXGfXyTw=s0"
+                 data-caption="Borosilicate Glass & Water Pieces">
+              <div class="h-56 overflow-hidden">
+                <img src="https://lh3.googleusercontent.com/CBLtgz35_L5MXET_ZWPUZMYTh5u8j4sJoGf9ojckSWLGlISDH5Oz6d49kvLg5Mlr7JO8jpi9_DfXGfXyTw=s0" 
+                     alt="Borosilicate Glass" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="p-3 border-t border-brand-border/60 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-[10px] text-brand-copper font-bold uppercase">Glass Selection</span>
+                  <p class="text-white font-medium">Artistic & Durable Pieces</p>
+                </div>
+                <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 group-hover:text-brand-copper transition"></i>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 3: REVIEWS (Dedicated Customer Ratings Hub) -->
+    <div id="page-reviews" class="page-view">
+      <section class="py-8 sm:py-12 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
+          
+          <!-- Review Header Card -->
+          <div class="bg-brand-surface border border-brand-border rounded-2xl p-5 sm:p-7 mb-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+              <div class="flex items-center gap-4">
+                <div class="w-20 h-20 rounded-2xl bg-brand-card border border-brand-copper/30 flex flex-col items-center justify-center">
+                  <span class="text-3xl font-display font-extrabold text-white">4.1</span>
+                  <div class="text-brand-copper text-xs">★★★★☆</div>
+                </div>
+                <div>
+                  <h2 class="text-xl sm:text-2xl font-display font-bold text-white">Google Reviews</h2>
+                  <p class="text-xs text-brand-muted mt-0.5">Based on 18 verified ratings on Google Maps</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
+                <a href="https://business.google.com/n/7847553326301580869/reviews" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl copper-btn-gradient text-slate-950 font-bold text-xs hover:opacity-95 transition flex items-center justify-center gap-1.5 shadow-md shadow-brand-copper/20">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Review Us on Google</span>
+                </a>
+                <button id="btnOpenFeedbackModal" class="px-4 py-2.5 rounded-xl bg-brand-card border border-brand-border hover:bg-slate-700 text-slate-200 font-semibold text-xs transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="message-square-plus" class="w-3.5 h-3.5 text-brand-copper"></i>
+                  <span>Leave Feedback</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="reviewsContainer">
+            
+            <!-- Review: Khalil Malik -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex flex-col justify-between copper-border-glow">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-brand-copper/20 border border-brand-copper/40 flex items-center justify-center text-brand-copper font-bold text-xs">KM</div>
+                    <div>
+                      <h4 class="text-xs font-bold text-white">Khalil Malik</h4>
+                      <span class="text-[10px] text-brand-muted">Local Guide • Google Review</span>
+                    </div>
+                  </div>
+                  <div class="text-brand-copper text-xs">★★★★★</div>
+                </div>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                  “I had a great experience at this smoke shop in Philadelphia! The staff is very friendly, welcoming, and always ready to help. They take the time to explain the products and give good recommendations, which makes shopping here easy and enjoyable. The shop is clean, well organized...”
+                </p>
+              </div>
+              <div class="pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+                <span>Verified Customer</span>
+                <a href="https://business.google.com/n/7847553326301580869/reviews" target="_blank" rel="noopener noreferrer" class="text-brand-copper hover:underline flex items-center gap-1">
+                  <span>View on Google</span>
+                  <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Review: Enaya Ahmad -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex flex-col justify-between copper-border-glow">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-xs">EA</div>
+                    <div>
+                      <h4 class="text-xs font-bold text-white">Enaya Ahmad</h4>
+                      <span class="text-[10px] text-brand-muted">Google Review</span>
+                    </div>
+                  </div>
+                  <div class="text-brand-copper text-xs">★★★★★</div>
+                </div>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                  “Nice stuff and service is very good specially they respect the customer.”
+                </p>
+              </div>
+              <div class="pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+                <span>Verified Customer</span>
+                <a href="https://business.google.com/n/7847553326301580869/reviews" target="_blank" rel="noopener noreferrer" class="text-brand-copper hover:underline flex items-center gap-1">
+                  <span>View on Google</span>
+                  <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Review: Aaron -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex flex-col justify-between copper-border-glow">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 font-bold text-xs">A</div>
+                    <div>
+                      <h4 class="text-xs font-bold text-white">Aaron</h4>
+                      <span class="text-[10px] text-brand-muted">Google Review</span>
+                    </div>
+                  </div>
+                  <div class="text-brand-copper text-xs">★★★★★</div>
+                </div>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                  “they have a great selection and very reasonably priced items”
+                </p>
+              </div>
+              <div class="pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+                <span>Verified Customer</span>
+                <a href="https://business.google.com/n/7847553326301580869/reviews" target="_blank" rel="noopener noreferrer" class="text-brand-copper hover:underline flex items-center gap-1">
+                  <span>View on Google</span>
+                  <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Review: Niamat Ullah Arabzada -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 flex flex-col justify-between copper-border-glow">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xs">NA</div>
+                    <div>
+                      <h4 class="text-xs font-bold text-white">Niamat Ullah Arabzada</h4>
+                      <span class="text-[10px] text-brand-muted">Google Review</span>
+                    </div>
+                  </div>
+                  <div class="text-brand-copper text-xs">★★★★★</div>
+                </div>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                  “So nice green broad smoke shop, store is very clean and good service”
+                </p>
+              </div>
+              <div class="pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+                <span>Verified Customer</span>
+                <a href="https://business.google.com/n/7847553326301580869/reviews" target="_blank" rel="noopener noreferrer" class="text-brand-copper hover:underline flex items-center gap-1">
+                  <span>View on Google</span>
+                  <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 4: HOURS & LOCATION (Schedule + Map + Transit) -->
+    <div id="page-hours-location" class="page-view">
+      <section class="py-8 sm:py-12 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto space-y-8">
+          
+          <div class="text-center sm:text-left">
+            <span class="text-[11px] font-bold text-brand-copper uppercase tracking-wider">Hours & Directions</span>
+            <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-0.5">Visit Greenbroad Smoke Shop</h2>
+            <p class="text-xs sm:text-sm text-brand-muted mt-1">620 South Broad Street, Philadelphia, PA 19146</p>
+          </div>
+
+          <!-- Schedule & Info Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Weekly Hours Card -->
+            <div class="lg:col-span-6 bg-brand-surface border border-brand-border rounded-2xl p-5 sm:p-6">
+              <div class="flex items-center justify-between mb-4 border-b border-brand-border/60 pb-3">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="clock" class="w-4 h-4 text-brand-copper"></i>
+                  <h3 class="font-display font-bold text-sm sm:text-base text-white">Weekly Store Schedule</h3>
+                </div>
+                <span id="hoursDetailBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-copper/15 text-brand-copper">
+                  Checking...
+                </span>
+              </div>
+
+              <div class="space-y-1.5 text-xs sm:text-sm" id="weeklyScheduleList">
+                <div data-day="1" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Monday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="2" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Tuesday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="3" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Wednesday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="4" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Thursday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="5" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Friday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="6" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Saturday</span>
+                  <span class="text-white font-mono">9:00 AM – 11:00 PM</span>
+                </div>
+                <div data-day="0" class="flex justify-between py-2 px-3 rounded-xl transition">
+                  <span class="text-slate-300 font-medium">Sunday</span>
+                  <span class="text-white font-mono">9:00 AM – 10:00 PM</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-brand-border/60 text-[11px] text-brand-muted flex justify-between">
+                <span>Philadelphia ET: <span id="currentClock" class="text-slate-200 font-mono font-medium">--:--</span></span>
+                <span class="text-brand-copper font-medium">Open 7 days</span>
+              </div>
+            </div>
+
+            <!-- Location & Transit Details -->
+            <div class="lg:col-span-6 bg-brand-surface border border-brand-border rounded-2xl p-5 sm:p-6 space-y-4">
+              <h3 class="font-display font-bold text-sm sm:text-base text-white flex items-center gap-2 border-b border-brand-border/60 pb-3">
+                <i data-lucide="map-pin" class="w-4 h-4 text-brand-copper"></i>
+                <span>Getting Here</span>
+              </h3>
+
+              <div class="space-y-3 text-xs text-slate-300">
+                <div class="flex items-start gap-2.5">
+                  <i data-lucide="navigation" class="w-4 h-4 text-brand-copper shrink-0 mt-0.5"></i>
+                  <div>
+                    <strong class="text-white block">Address:</strong>
+                    <span>620 South Broad Street, Philadelphia, PA 19146</span>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-2.5">
+                  <i data-lucide="train" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                  <div>
+                    <strong class="text-white block">SEPTA Subway:</strong>
+                    <span>Broad Street Line (BSL) – Lombard-South Station is 1 block north. Route 4 bus stops right along the corridor.</span>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-2.5">
+                  <i data-lucide="car" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                  <div>
+                    <strong class="text-white block">Parking:</strong>
+                    <span>Metered street parking on Broad St and neighborhood parking on Bainbridge and Fitzwater.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-brand-border/60 flex flex-col sm:flex-row gap-2">
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Greenbroad+Smoke+Shop+620+South+Broad+Street+Philadelphia+PA+19146&destination_place_id=ChIJO3fG1KHHxokRfnV-4RnNIsA" class="flex-1 py-2.5 px-4 rounded-xl copper-btn-gradient text-slate-950 text-center font-bold text-xs hover:opacity-95 transition flex items-center justify-center gap-1.5 shadow-md shadow-brand-copper/20">
+                  <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+                  <span>Open in Maps</span>
+                </a>
+                <a href="tel:2153985169" class="py-2.5 px-4 rounded-xl bg-brand-card border border-brand-border text-slate-200 text-xs font-semibold hover:text-white transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5 text-brand-copper"></i>
+                  <span>Call Store</span>
+                </a>
+                <button id="btnCopyAddress" class="py-2.5 px-3 rounded-xl bg-brand-card border border-brand-border text-slate-300 text-xs font-semibold hover:text-white transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span id="copyButtonText">Copy</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Embedded Map -->
+          <div class="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden h-72 sm:h-96 shadow-xl relative">
+            <iframe 
+              title="Google Map location of Greenbroad Smoke Shop"
+              src="https://maps.google.com/maps?q=620+South+Broad+Street,+Philadelphia,+PA+19146&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+              class="w-full h-full border-0 grayscale-[20%] contrast-110"
+              loading="lazy"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Interactive Feedback Modal -->
+  <div id="feedbackModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+    <div class="relative w-full max-w-sm bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-2xl">
+      <button id="btnCloseFeedback" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <h3 class="text-lg font-display font-bold text-white mb-1">Write Feedback</h3>
+      <p class="text-xs text-brand-muted mb-4">Share your review of Greenbroad Smoke Shop</p>
+
+      <form id="feedbackForm" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" for="reviewerName">Your Name</label>
+          <input type="text" id="reviewerName" required placeholder="e.g. David M." class="w-full px-3 py-2 rounded-xl bg-brand-card border border-brand-border text-white text-xs focus:outline-none focus:border-brand-copper">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Rating</label>
+          <div class="flex items-center gap-1.5" id="starRatingSelect">
+            <button type="button" data-val="1" class="star-btn text-xl text-brand-copper">★</button>
+            <button type="button" data-val="2" class="star-btn text-xl text-brand-copper">★</button>
+            <button type="button" data-val="3" class="star-btn text-xl text-brand-copper">★</button>
+            <button type="button" data-val="4" class="star-btn text-xl text-brand-copper">★</button>
+            <button type="button" data-val="5" class="star-btn text-xl text-brand-copper">★</button>
+            <span id="ratingDisplayLabel" class="text-xs text-brand-copper font-bold ml-2">5 Stars</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" for="reviewComment">Your Feedback</label>
+          <textarea id="reviewComment" rows="3" required placeholder="Clean shop, fair prices, great selection..." class="w-full px-3 py-2 rounded-xl bg-brand-card border border-brand-border text-white text-xs focus:outline-none focus:border-brand-copper"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl copper-btn-gradient text-slate-950 font-bold text-xs hover:opacity-95 transition shadow-md shadow-brand-copper/20">
+          Publish Feedback
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clean Footer -->
+  <footer class="bg-brand-surface border-t border-brand-border py-8 text-xs text-brand-muted">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left mb-4">
+        <div>
+          <span class="font-display font-bold text-brand-platinum text-sm">GREENBROAD SMOKE SHOP</span>
+          <p class="text-[11px] text-slate-400 mt-0.5">620 South Broad St, Philadelphia, PA 19146 • (215) 398-5169</p>
+        </div>
+        <div class="flex gap-4 text-xs">
+          <button onclick="navigateTo('home')" class="hover:text-brand-copper transition">Home</button>
+          <button onclick="navigateTo('gallery')" class="hover:text-brand-copper transition">Gallery</button>
+          <button onclick="navigateTo('reviews')" class="hover:text-brand-copper transition">Reviews</button>
+          <button onclick="navigateTo('hours-location')" class="hover:text-brand-copper transition">Hours & Map</button>
+        </div>
+      </div>
+      <div class="pt-4 border-t border-brand-border/60 text-[11px] text-slate-500 text-center sm:text-left flex flex-col sm:flex-row justify-between gap-2">
+        <p>Strictly 21+. Valid government-issued photo ID required in-store.</p>
+        <p>&copy; <span id="currentYear"></span> Greenbroad Smoke Shop.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Native Mobile Bottom Navigation Dock -->
+  <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-brand-surface/95 backdrop-blur-lg border-t border-brand-border py-1.5 px-2">
+    <div class="grid grid-cols-5 gap-1 text-center">
+      
+      <button onclick="navigateTo('home')" id="mobile-tab-home" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-brand-copper font-bold transition">
+        <i data-lucide="home" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px]">Home</span>
+      </button>
+
+      <button onclick="navigateTo('gallery')" id="mobile-tab-gallery" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 transition">
+        <i data-lucide="image" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px]">Gallery</span>
+      </button>
+
+      <button onclick="navigateTo('reviews')" id="mobile-tab-reviews" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 transition">
+        <i data-lucide="star" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px]">Reviews</span>
+      </button>
+
+      <button onclick="navigateTo('hours-location')" id="mobile-tab-hours-location" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 transition">
+        <i data-lucide="map-pin" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px]">Hours</span>
+      </button>
+
+      <a href="tel:2153985169" class="flex flex-col items-center justify-center py-1.5 rounded-xl copper-btn-gradient text-slate-950 font-bold transition shadow-sm" title="Call Greenbroad Smoke Shop">
+        <i data-lucide="phone-call" class="w-4 h-4 mb-0.5"></i>
+        <span class="text-[10px]">Call Shop</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Single Page Architecture & Logic -->
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // 1. Clean Multi-Page Tab Router
+    function navigateTo(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page-view').forEach(p => {
+        p.classList.remove('active');
+      });
+
+      // Show target page
+      const targetPage = document.getElementById(`page-${pageId}`);
+      if (targetPage) {
+        targetPage.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Update Desktop tabs
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-brand-copper', 'bg-brand-surface', 'shadow-sm');
+        btn.classList.add('text-slate-300');
+      });
+      const activeDesktop = document.getElementById(`desktop-tab-${pageId}`);
+      if (activeDesktop) {
+        activeDesktop.classList.add('text-brand-copper', 'bg-brand-surface', 'shadow-sm');
+        activeDesktop.classList.remove('text-slate-300');
+      }
+
+      // Update Mobile tabs
+      ['home', 'gallery', 'reviews', 'hours-location'].forEach(tab => {
+        const mobBtn = document.getElementById(`mobile-tab-${tab}`);
+        if (mobBtn) {
+          if (tab === pageId) {
+            mobBtn.classList.add('text-brand-copper', 'font-bold');
+            mobBtn.classList.remove('text-slate-400');
+          } else {
+            mobBtn.classList.remove('text-brand-copper', 'font-bold');
+            mobBtn.classList.add('text-slate-400');
+          }
+        }
+      });
+    }
+
+    // 2. Age Gate (localStorage)
+    const ageModal = document.getElementById('ageGateModal');
+    const underAgeNotice = document.getElementById('underAgeNotice');
+    const btnVerifyAge = document.getElementById('btnVerifyAge');
+    const btnExitAge = document.getElementById('btnExitAge');
+    const AGE_STORAGE_KEY = 'greenbroad_age_verified_21';
+
+    if (localStorage.getItem(AGE_STORAGE_KEY) === 'true') {
+      ageModal.classList.add('hidden');
+    }
+
+    btnVerifyAge.addEventListener('click', () => {
+      localStorage.setItem(AGE_STORAGE_KEY, 'true');
+      ageModal.classList.add('opacity-0');
+      setTimeout(() => ageModal.classList.add('hidden'), 250);
+    });
+
+    btnExitAge.addEventListener('click', () => {
+      ageModal.classList.add('hidden');
+      underAgeNotice.classList.remove('hidden');
+    });
+
+    // 3. Photo Gallery Filter & Lightbox
+    const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+    const galleryCards = document.querySelectorAll('.gallery-card');
+    const lightboxModal = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const btnCloseLightbox = document.getElementById('btnCloseLightbox');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-brand-copper', 'text-slate-950', 'active');
+          b.classList.add('bg-brand-card', 'text-slate-300');
+        });
+        btn.classList.remove('bg-brand-card', 'text-slate-300');
+        btn.classList.add('bg-brand-copper', 'text-slate-950', 'active');
+
+        const filter = btn.getAttribute('data-filter');
+        galleryCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    galleryCards.forEach(card => {
+      card.addEventListener('click', () => {
+        lightboxImg.src = card.getAttribute('data-src');
+        lightboxCaption.textContent = card.getAttribute('data-caption');
+        lightboxModal.classList.remove('hidden');
+      });
+    });
+
+    btnCloseLightbox.addEventListener('click', () => lightboxModal.classList.add('hidden'));
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) lightboxModal.classList.add('hidden');
+    });
+
+    // 4. Real-time Hours Calculation (Philadelphia / America/New_York)
+    function calculateHours() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat([], { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
+      const dayOfWeekET = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" })).getDay();
+      
+      const timeParts = formatter.format(now).split(':');
+      const currentHour = parseInt(timeParts[0], 10);
+      const currentMin = parseInt(timeParts[1], 10);
+      const currentMinutesToday = currentHour * 60 + currentMin;
+
+      const openMinutes = 9 * 60;
+      const closeMinutes = (dayOfWeekET === 0) ? (22 * 60) : (23 * 60);
+      const closingTimeStr = (dayOfWeekET === 0) ? '10:00 PM' : '11:00 PM';
+
+      const isOpen = (currentMinutesToday >= openMinutes && currentMinutesToday < closeMinutes);
+
+      const statusBadge = document.getElementById('liveStatusBadge');
+      const hoursDetailBadge = document.getElementById('hoursDetailBadge');
+
+      if (isOpen) {
+        statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Open Now • Closes ${closingTimeStr}</span>`;
+        statusBadge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30";
+        if (hoursDetailBadge) {
+          hoursDetailBadge.textContent = "Open Now";
+          hoursDetailBadge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400";
+        }
+      } else {
+        statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span>Closed Now • Reopens 9:00 AM</span>`;
+        statusBadge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30";
+        if (hoursDetailBadge) {
+          hoursDetailBadge.textContent = "Closed Now";
+          hoursDetailBadge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300";
+        }
+      }
+
+      // Highlight active day in schedule
+      document.querySelectorAll('#weeklyScheduleList > div').forEach(row => {
+        if (parseInt(row.getAttribute('data-day'), 10) === dayOfWeekET) {
+          row.classList.add('bg-brand-copper/15', 'border', 'border-brand-copper/40');
+          row.querySelector('span:first-child').classList.add('text-brand-copper', 'font-bold');
+        } else {
+          row.classList.remove('bg-brand-copper/15', 'border', 'border-brand-copper/40');
+        }
+      });
+
+      const clockStr = now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' });
+      const clockEl = document.getElementById('currentClock');
+      if (clockEl) clockEl.textContent = clockStr;
+    }
+
+    calculateHours();
+    setInterval(calculateHours, 60000);
+
+    // 5. Interactive Feedback Modal
+    const feedbackModal = document.getElementById('feedbackModal');
+    const btnOpenFeedbackModal = document.getElementById('btnOpenFeedbackModal');
+    const btnCloseFeedback = document.getElementById('btnCloseFeedback');
+    const feedbackForm = document.getElementById('feedbackForm');
+    const reviewsContainer = document.getElementById('reviewsContainer');
+    let selectedRating = 5;
+
+    if (btnOpenFeedbackModal) {
+      btnOpenFeedbackModal.addEventListener('click', () => feedbackModal.classList.remove('hidden'));
+    }
+    btnCloseFeedback.addEventListener('click', () => feedbackModal.classList.add('hidden'));
+
+    const starBtns = document.querySelectorAll('.star-btn');
+    const ratingDisplayLabel = document.getElementById('ratingDisplayLabel');
+
+    starBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedRating = parseInt(btn.getAttribute('data-val'), 10);
+        ratingDisplayLabel.textContent = `${selectedRating} Star${selectedRating > 1 ? 's' : ''}`;
+        starBtns.forEach((b, idx) => {
+          if (idx < selectedRating) {
+            b.classList.add('text-brand-copper');
+            b.classList.remove('text-slate-600');
+          } else {
+            b.classList.remove('text-brand-copper');
+            b.classList.add('text-slate-600');
+          }
+        });
+      });
+    });
+
+    feedbackForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reviewerName').value.trim();
+      const comment = document.getElementById('reviewComment').value.trim();
+      if (!name || !comment) return;
+
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'C';
+      const starString = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+
+      const newCard = document.createElement('div');
+      newCard.className = "bg-brand-card border border-brand-copper/50 rounded-2xl p-5 flex flex-col justify-between copper-border-glow";
+      newCard.innerHTML = `
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-brand-copper/25 border border-brand-copper flex items-center justify-center text-brand-copper font-bold text-xs">
+                ${initials}
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">${name}</h4>
+                <span class="text-[10px] text-brand-copper">Just now • Customer Feedback</span>
+              </div>
+            </div>
+            <div class="text-brand-copper text-xs font-mono">${starString}</div>
+          </div>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">“${comment}”</p>
+        </div>
+        <div class="pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+          <span class="text-emerald-400 font-medium">✓ Verified Feedback</span>
+          <span class="text-slate-400">Storefront Review</span>
+        </div>
+      `;
+
+      reviewsContainer.insertBefore(newCard, reviewsContainer.firstChild);
+      feedbackForm.reset();
+      feedbackModal.classList.add('hidden');
+    });
+
+    // 6. Copy Address
+    const btnCopy = document.getElementById('btnCopyAddress');
+    const copyText = document.getElementById('copyButtonText');
+    if (btnCopy) {
+      btnCopy.addEventListener('click', () => {
+        const address = "620 South Broad Street, Philadelphia, PA 19146";
+        const dummy = document.createElement("input");
+        document.body.appendChild(dummy);
+        dummy.value = address;
+        dummy.select();
+        try {
+          document.execCommand("copy");
+          copyText.textContent = "Copied!";
+          setTimeout(() => { copyText.textContent = "Copy Address"; }, 2000);
+        } catch (err) {}
+        document.body.removeChild(dummy);
+      });
+    }
+
+    // 7. Dynamic Year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
